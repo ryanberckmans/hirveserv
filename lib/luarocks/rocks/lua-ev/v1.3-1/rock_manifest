@@ -1,0 +1,6 @@
+rock_manifest = {
+  lib={
+    ['ev.so']='632b2be9d386f1cea3e49b88e1b2bee6'
+  },
+  ['lua-ev-v1.3-1.rockspec']='1c37f810b0d13db06af9edad31238b8e'
+}
