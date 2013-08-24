@@ -158,7 +158,7 @@ local function initClientSettings( client )
 	end
 end
 
-local function authHandler( client )
+function authHandler( client )
 	local lower = client.name:lower()
 
 	local isPending, userID, password = chat.db.users( "SELECT isPending, userID, password FROM users WHERE name = ?", lower )()
