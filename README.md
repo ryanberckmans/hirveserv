@@ -1,14 +1,14 @@
 
-= built-in wiki command =
+# built-in wiki command
 
-== how the wiki works ==
+## how the wiki works
 
 * hirveserv looks in `wiki/` for wiki articles
 * the `wiki/` directory tree must be formatted correctly or hirveserv may crash and/or the wiki will not function
 * when connected to hirveserv, `/chat <server> wiki`
 * after making a change to the wiki/ directory tree, `/chat <server> rebuildwiki`
 
-== wiki file structure ==
+## wiki file structure
 
     wiki/zones/           # the wiki category "zones"
     wiki/zones/zones.txt  # zones category index
@@ -20,11 +20,11 @@
     wiki/zones/tomb/silver.txt # part of the tomb multipage
     wiki/zones/tomb/gold.txt # part of the tomb multipage
 
-== wiki uniqueness of names ==
+## wiki uniqueness of names
 
 Wiki categories, pages, and multipages names must be unique.  No names may be duplicated (even across categories/pages/multipages). In practical terms, this means "foo.txt" must not appear twice.
 
-== wiki category index format ==
+## wiki category index format
 
 * file name: `wiki/<category>/<category>.txt`
 * 1st line of file: description of category
@@ -35,7 +35,7 @@ e.g.
     $cat wiki/zones/zones.txt
     zone walkthroughs
 
-== wiki page format ==
+## wiki page format
 
 * file name: `wiki/<category>/name.txt` or `wiki/<category>/<multipage>/name.txt`
 * 1st line of file: description of article
@@ -54,7 +54,7 @@ e.g. page in a multipage
     day 2 bronze
     <walkthrough, any number of lines>
 
-== wiki multipage format ==
+## wiki multipage format
 
 * file name: `wiki/<category>/<multipage>/<multipage>.txt`
 * 1st line of file: description of multipage
