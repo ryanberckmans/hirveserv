@@ -124,7 +124,7 @@ chat.command( "rebuildwiki", "all", function( client )
 	end
 end, "Rebuild the wiki" )
 
-chat.command( "wiki", "user", {
+chat.command( "wiki", nil, {
 	[ "^$" ] = function( client )
 		local output = "#lwThe wiki is split into the following categories:"
 
@@ -220,6 +220,104 @@ chat.command( "wiki", "user", {
 
 		client:msg( "No wiki entry for #ly%s#d.", name )
 	end,
-}, "<category/page> [page] [search]", "Super duper wiki" )
+}, "[<category> | <page> [page number]], try these:  \"wiki\"   \"wiki scripts\"   \"wiki tomb\"   \"wiki tomb 1\"", "Wiki, try these:  \"wiki\"   \"wiki scripts\"   \"wiki tomb\"   \"wiki tomb 1\"" )
+
+chat.command( "w", nil, {
+	[ "^$" ] = function( client )
+		local output = "#lwThe wiki is split into the following categories:"
+
+		for _, category in ipairs( categoriesList ) do
+			output = output .. "\n    #ly%s #d- %s" % {
+				category.name,
+				category.description,
+			}
+		end
+
+		client:msg( "%s", output )
+	end,
+
+	[ "^(%S+)$" ] = function( client, name )
+		name = name:lower()
+
+		if categories[ name ] then
+			local output = "#lwPages in #ly%s#lw:" % name
+
+			for _, page in ipairs( categories[ name ].pages ) do
+				output = output .. "\n    #ly%s #d- %s" % {
+					page.name,
+					page.title,
+				}
+			end
+
+			client:msg( "%s", output )
+
+			return
+		end
+
+		if pages[ name ] then
+			if pages[ name ].pages then
+				local output = "#ly%s#lw is split into #ly%d#lw pages:" % {
+					name,
+					#pages[ name ].pages,
+				}
+
+				for i, page in ipairs( pages[ name ].pages ) do
+					output = output .. "\n    #ly%d #d- %s" % {
+						i,
+						page.title,
+					}
+				end
+
+				client:msg( "%s", output )
+			else
+				client:msg( "#lwShowing #ly%s#lw:\n#d%s", name, pages[ name ].body )
+			end
+
+			return
+		end
+
+		client:msg( "No wiki entry for #ly%s#d.", name )
+	end,
+
+	[ "^(%S+)%s+(%d+)$" ] = function( client, name, page )
+		name = name:lower()
+		page = tonumber( page )
+
+		--if categories[ name ] then
+		--	local output = "#lwPages in #ly%s#lw:" % name
+
+		--	for _, page in ipairs( categories[ name ] ) do
+		--		output = output .. "\n    #ly%s #d- %s" % {
+		--			page.name,
+		--			page.title or "FIX",
+		--		}
+		--	end
+
+		--	client:msg( "%s", output )
+
+		--	return
+		--end
+
+		if pages[ name ] then
+			if pages[ name ].pages then
+				if pages[ name ].pages[ page ] then
+					client:msg( "#lwShowing #ly%s#lw: #d(page #lw%d#d of #lw%d#d)\n%s",
+						name,
+						page, #pages[ name ].pages,
+						pages[ name ].pages[ page ].body
+					)
+				else
+					client:msg( "#lwBad page number." )
+				end
+			else
+				client:msg( "#lwShowing #ly%s#lw:\n#d%s", name, pages[ name ].body )
+			end
+
+			return
+		end
+
+		client:msg( "No wiki entry for #ly%s#d.", name )
+	end,
+}, "<category/page> [page] [search]", "alias for wiki" )
 
 buildWiki()
