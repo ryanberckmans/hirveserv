@@ -18,6 +18,7 @@ function Client:new( socket )
 		settings = { },
 		ips = { },
 		ip = socket:getpeername(),
+		visible = chat.config.visible,
 	}
 
 	assert( coroutine.resume( client.dataHandler, client ) )
@@ -113,7 +114,9 @@ function Client:nameChange( newName )
 	if self.state == "chatting" then
 		chat.event( "nameChange", self, newName )
 
-		self:xmsg( "#lw%s#d changed their name to #lw%s#d.", self.name, newName )
+    if self.visible then
+		  self:xmsg( "#lw%s#d changed their name to #lw%s#d.", self.name, newName )
+    end
 	end
 
 	self.name = newName
