@@ -38,7 +38,7 @@ Great. Use Ctrl-C twice to turn it off.
 
 e.g. 
 
-1. Run prints *Use the password **2y05iH.7srs9qzKQJYeo8y06zO** to create admin account*
+1. `./run` outputs *Use the password 2y05iH.7srs9qzKQJYeo8y06zO to create admin account*
 2. `/chat <server> 2y05iH.7srs9qzKQJYeo8y06z`
 
 ### Ready...3 2 1
