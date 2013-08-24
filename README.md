@@ -1,3 +1,52 @@
+# running hirveserv on ubuntu
+
+## requirements
+
+* tested on Ubuntu 12.04 32bit
+* clone and checkout ubuntu branch: `git checkout ubuntu-i386`
+* apt has some of the dependencies: `apt-get install lua5.1 liblua5.1-socket2 sqlite3`
+* other dependencies are bundled in `lib/`, compiled on Ubuntu 12.04 32bit
+
+Execute `./run` to start hirveserv
+
+## configuration
+
+The first time hirveserv successfully boots, you will see something like this:
+
+        $ ./run
+    setting undefined variable: enforce
+    setting undefined variable: sqlite3
+    setting undefined variable: sqlite
+    setting undefined variable: Client
+    Use the password 2y05iH.7srs9qzKQJYeo8y06zO to create admin account
+    setting undefined variable: socket
+
+Great. Use Ctrl-C twice to turn it off.
+
+### config file
+
+1. `cp config_default.lua config.lua`
+2. edit `config.lua`:
+3. set `name = "<your server name>"` 
+4. set `auth = true`
+
+### admin account
+
+1. run hirveserv with `./run`, copy the admin password printed to stdout
+2. connect to the server with your mud client, in mudmaster this might be `/call 192.168.1.123`
+3. `/chat <server> <the admin password printed to stdout when you ./run>`
+
+e.g. 
+
+1. Run prints *Use the password **2y05iH.7srs9qzKQJYeo8y06zO** to create admin account*
+2. `/chat <server> 2y05iH.7srs9qzKQJYeo8y06z`
+
+### Ready...3 2 1
+
+* setup done!
+* `/chat <server> help`
+* create user accounts
+* see the wiki section
 
 # built-in wiki command
 
