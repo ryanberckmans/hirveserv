@@ -20,6 +20,8 @@
     wiki/zones/tomb/silver.txt # part of the tomb multipage
     wiki/zones/tomb/gold.txt # part of the tomb multipage
 
+Filenames may not contain whitespace.
+
 ## wiki uniqueness of names
 
 Wiki categories, pages, and multipages names must be unique.  No names may be duplicated (even across categories/pages/multipages). In practical terms, this means "foo.txt" must not appear twice.
