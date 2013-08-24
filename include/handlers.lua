@@ -7,8 +7,7 @@ local userCount = chat.db.users( "SELECT COUNT( * ) FROM users" )()
 local adminCode
 
 if userCount == 0 then
-	adminCode = bcrypt.salt( 1 ):match( "([^$]+)$" )
-
+	adminCode = bcrypt.salt( 5 ):gsub("%$","")
 	print( chat.parseColours( "Use the password #lw%s#d to create admin account" % adminCode ) )
 end
 

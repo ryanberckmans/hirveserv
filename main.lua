@@ -2,7 +2,7 @@
 
 chat = { }
 
-require( "bcrypt" )
+bcrypt = require( "bcrypt" )
 
 local lfs = require( "lfs" )
 
