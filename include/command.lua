@@ -149,6 +149,7 @@ require( "commands.ipauth" )
 require( "commands.motd" )
 require( "commands.alias" )
 require( "commands.wiki" )
+require( "commands.forceauth" )
 
 return {
 	canCall = canCall,
