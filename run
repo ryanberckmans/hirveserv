@@ -1,0 +1,2 @@
+#!/bin/sh
+env LUA_CPATH="lib/lua/5.1/?.so" lua main.lua
