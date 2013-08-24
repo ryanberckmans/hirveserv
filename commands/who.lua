@@ -1,9 +1,10 @@
 local function who( client )
-	local output = "Online: #lwyou"
-
   if not client.visible then
-		 output = output .. "(invisible)"
-  end
+    client:msg("You may not use the #lwwho#d command while invisible.")
+	  return
+	end
+
+	local output = "Online: #lwyou"
 
 	for _, other in ipairs( chat.clients ) do
 		if other ~= client and other.state == "chatting" and other.visible then

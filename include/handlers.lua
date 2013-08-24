@@ -18,7 +18,7 @@ local function chatHandler( client )
 	  chat.msg( "#lw%s#d is in the house!", client.name )
   else
 	  client.privs["invisible"] = true
-    client:msg( "You are #lccompletely invisible#d and can use the wiki anonymously/privately. Your chats are muted and you don't appear in 'who'. You still see public chats by others. Use #lwvisible#d to start chatting.")
+    client:msg( "You are #lccompletely invisible#d and can use the wiki anonymously/privately. You cannot chat and don't receive chats. You're a ghost. Use #lwvisible#d to start chatting.")
   end
 
 	chat.event( "connect", client )
