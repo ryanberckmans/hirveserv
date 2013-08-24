@@ -150,6 +150,7 @@ require( "commands.motd" )
 require( "commands.alias" )
 require( "commands.wiki" )
 require( "commands.forceauth" )
+require( "commands.visible" )
 
 return {
 	canCall = canCall,

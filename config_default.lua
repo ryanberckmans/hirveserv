@@ -4,4 +4,5 @@ chat.config = {
 	auth = false,
 	tempAuthDuration = 60,
 	bcryptRounds = 5,
+  visible = true,
 }

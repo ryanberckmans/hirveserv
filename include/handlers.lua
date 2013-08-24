@@ -14,7 +14,13 @@ end
 
 local function chatHandler( client )
 	client.state = "chatting"
-	chat.msg( "#lw%s#d is in the house!", client.name )
+
+  if client.visible then
+	  chat.msg( "#lw%s#d is in the house!", client.name )
+  else
+	  client.privs["invisible"] = true
+    client:msg( "You are #lccompletely invisible#d and can use the wiki anonymously/privately. Your chats are muted and you don't appear in 'who'. You still see public chats by others. Use #lwvisible#d to start chatting.")
+  end
 
 	chat.event( "connect", client )
 
@@ -41,7 +47,7 @@ local function chatHandler( client )
 				end
 			end
 
-			if not pm then
+			if not pm and client.visible then
 				client:chatAll( args )
 			end
 		elseif command == "pm" then
