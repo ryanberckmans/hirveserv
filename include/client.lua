@@ -86,7 +86,7 @@ function Client:xmsg( form, ... )
 	chat.event( "xmsg", self, message )
 
 	for _, client in ipairs( chat.clients ) do
-		if client ~= self and client.state == "chatting" then
+		if client ~= self and client.state == "chatting" and client.visible then
 			client:msg( "%s", message )
 		end
 	end
@@ -96,7 +96,7 @@ function Client:chatAll( message )
 	chat.event( "chatAll", self, message )
 
 	for _, client in ipairs( chat.clients ) do
-		if client ~= self and client.state == "chatting" then
+		if client ~= self and client.state == "chatting" and client.visible then
 			client:chat( message )
 		end
 	end
@@ -168,7 +168,7 @@ function chat.msg( form, ... )
 	chat.event( "msg", message )
 
 	for _, client in ipairs( chat.clients ) do
-		if  client.state == "chatting" then
+		if  client.state == "chatting" and client.visible then
 			client:msg( "%s", message )
 		end
 	end
