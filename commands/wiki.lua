@@ -124,8 +124,19 @@ chat.command( "rebuildwiki", "all", function( client )
 	end
 end, "Rebuild the wiki" )
 
-chat.command( "wiki", nil, {
-	[ "^$" ] = function( client )
+-- helper function which toggles the presense of an 'S' on the end of a string
+local function addOrRemoveS(s)
+  if s:len() < 2 then
+    return s
+  end
+  if (s:sub(-1):upper():match("S")) then
+    return s:sub(0,-2)
+  else
+    return s .. "s"
+  end  
+end
+
+local function wikiNoArgs( client )
 		local output = "#lwThe wiki is split into the following categories:"
 
 		for _, category in ipairs( categoriesList ) do
@@ -136,9 +147,10 @@ chat.command( "wiki", nil, {
 		end
 
 		client:msg( "%s", output )
-	end,
+end
 
-	[ "^(%S+)$" ] = function( client, name )
+local function wikiWithString( client, name, doRecursiveSmartCorrectIfNil )
+    local doRecursiveSmartCorrect = not doRecursiveSmartCorrectIfNil -- this parameter will always be nil for the top-level invocation of the function, and serves as a ghetto base-case for the smart-correct recursion
 		name = name:lower()
 
 		if categories[ name ] then
@@ -178,27 +190,16 @@ chat.command( "wiki", nil, {
 			return
 		end
 
-		client:msg( "No wiki entry for #ly%s#d.", name )
-	end,
-
-	[ "^(%S+)%s+(%d+)$" ] = function( client, name, page )
+    if doRecursiveSmartCorrect then
+		  wikiWithString(client, addOrRemoveS(name), true) -- repeat the entire lookup, this time passing "true" as the 3rd arg to disable smart-correct recursion (which'd be infinite recursion)
+    else
+		  client:msg( "No wiki entry for #ly%s#d.", name )
+    end
+end
+local function wikiWithStringAndNumber( client, name, page, doRecursiveSmartCorrectIfNil )
+    local doRecursiveSmartCorrect = not doRecursiveSmartCorrectIfNil -- this parameter will always be nil for the top-level invocation of the function, and serves as a ghetto base-case for the smart-correct recursion )
 		name = name:lower()
 		page = tonumber( page )
-
-		--if categories[ name ] then
-		--	local output = "#lwPages in #ly%s#lw:" % name
-
-		--	for _, page in ipairs( categories[ name ] ) do
-		--		output = output .. "\n    #ly%s #d- %s" % {
-		--			page.name,
-		--			page.title or "FIX",
-		--		}
-		--	end
-
-		--	client:msg( "%s", output )
-
-		--	return
-		--end
 
 		if pages[ name ] then
 			if pages[ name ].pages then
@@ -218,106 +219,25 @@ chat.command( "wiki", nil, {
 			return
 		end
 
-		client:msg( "No wiki entry for #ly%s#d.", name )
-	end,
-}, "[<category> | <page> [page number]], try these:  \"wiki\"   \"wiki scripts\"   \"wiki tomb\"   \"wiki tomb 1\"", "Wiki, try these:  \"wiki\"   \"wiki scripts\"   \"wiki tomb\"   \"wiki tomb 1\"" )
+    if doRecursiveSmartCorrect then
+		  wikiWithStringAndNumber(client, addOrRemoveS(name), page, true) -- repeat the entire lookup, this time passing "true" as the 3rd arg to disable smart-correct recursion (which'd be infinite recursion)
+    else
+		  client:msg( "No wiki entry for #ly%s#d.", name )
+    end
+end
 
-chat.command( "w", nil, {
-	[ "^$" ] = function( client )
-		local output = "#lwThe wiki is split into the following categories:"
+local wikicommand = {
+	[ "^$" ] = wikiNoArgs,
 
-		for _, category in ipairs( categoriesList ) do
-			output = output .. "\n    #ly%s #d- %s" % {
-				category.name,
-				category.description,
-			}
-		end
+	[ "^(%S+)$" ] = wikiWithString,
 
-		client:msg( "%s", output )
-	end,
+	[ "^(%S+)%s+(%d+)$" ] = wikiWithStringAndNumber,
+}
 
-	[ "^(%S+)$" ] = function( client, name )
-		name = name:lower()
+local wikicommanderrormsg = "[<category> | <page> [page number]], try these:  \"wiki\"   \"wiki scripts\"   \"wiki tomb\"   \"wiki tomb 1\""
+local wikihelpmsg = "Wiki, try these:  \"wiki\"   \"wiki scripts\"   \"wiki tomb\"   \"wiki tomb 1\""
 
-		if categories[ name ] then
-			local output = "#lwPages in #ly%s#lw:" % name
-
-			for _, page in ipairs( categories[ name ].pages ) do
-				output = output .. "\n    #ly%s #d- %s" % {
-					page.name,
-					page.title,
-				}
-			end
-
-			client:msg( "%s", output )
-
-			return
-		end
-
-		if pages[ name ] then
-			if pages[ name ].pages then
-				local output = "#ly%s#lw is split into #ly%d#lw pages:" % {
-					name,
-					#pages[ name ].pages,
-				}
-
-				for i, page in ipairs( pages[ name ].pages ) do
-					output = output .. "\n    #ly%d #d- %s" % {
-						i,
-						page.title,
-					}
-				end
-
-				client:msg( "%s", output )
-			else
-				client:msg( "#lwShowing #ly%s#lw:\n#d%s", name, pages[ name ].body )
-			end
-
-			return
-		end
-
-		client:msg( "No wiki entry for #ly%s#d.", name )
-	end,
-
-	[ "^(%S+)%s+(%d+)$" ] = function( client, name, page )
-		name = name:lower()
-		page = tonumber( page )
-
-		--if categories[ name ] then
-		--	local output = "#lwPages in #ly%s#lw:" % name
-
-		--	for _, page in ipairs( categories[ name ] ) do
-		--		output = output .. "\n    #ly%s #d- %s" % {
-		--			page.name,
-		--			page.title or "FIX",
-		--		}
-		--	end
-
-		--	client:msg( "%s", output )
-
-		--	return
-		--end
-
-		if pages[ name ] then
-			if pages[ name ].pages then
-				if pages[ name ].pages[ page ] then
-					client:msg( "#lwShowing #ly%s#lw: #d(page #lw%d#d of #lw%d#d)\n%s",
-						name,
-						page, #pages[ name ].pages,
-						pages[ name ].pages[ page ].body
-					)
-				else
-					client:msg( "#lwBad page number." )
-				end
-			else
-				client:msg( "#lwShowing #ly%s#lw:\n#d%s", name, pages[ name ].body )
-			end
-
-			return
-		end
-
-		client:msg( "No wiki entry for #ly%s#d.", name )
-	end,
-}, "<category/page> [page] [search]", "alias for wiki" )
+chat.command( "wiki", nil, wikicommand, wikicommanderrormsg, wikihelpmsg )
+chat.command( "w", nil, wikicommand, wikicommanderrormsg, "alias for wiki" )
 
 buildWiki()
