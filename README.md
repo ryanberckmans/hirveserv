@@ -65,7 +65,10 @@ e.g. page in a multipage
 * the multipage directory is accessable with `/chat <server> wiki <multipage>`
 * each page in the multipage is accessible with `/chat <server> wiki <multipage> <page number>`
 
-In the example below, `/chat <server> wiki tomb` will show the tomb multipage directory. `/chat <server> wiki tomb 1` will access the bronze page, and `/chat <server> wiki tomb 3` will access the gold page.
+In the example below,
+* `/chat <server> wiki tomb` will show the tomb multipage directory
+* `/chat <server> wiki tomb 1` will access the bronze page
+* `/chat <server> wiki tomb 3` will access the gold page.
 
 e.g.
 
