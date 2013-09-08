@@ -62,6 +62,10 @@ e.g. page in a multipage
 * 1st line of file: description of multipage
 * rest of file: filenames (without .txt extension) of pages in the multipage, one per line
 * the multipage should contain at least one page
+* the multipage directory is accessable with `/chat <server> wiki <multipage>`
+* each page in the multipage is accessible with `/chat <server> wiki <multipage> <page number>`
+
+In the example below, `/chat <server> wiki tomb` will show the tomb multipage directory. `/chat <server> wiki tomb 1` will access the bronze page, and `/chat <server> wiki tomb 3` will access the gold page.
 
 e.g.
 
